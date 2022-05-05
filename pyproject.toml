@@ -1,0 +1,55 @@
+# cSpell:words iptool POSIX pytest pylint mypy rgxs
+# cSpell:words Subnetting Wyant
+
+[tool.poetry]
+name = "iptool"
+version = "0.1.0"
+description = "IP Subnetting Tools"
+authors = ["Matthew Wyant <me@matthewwyant.com>"]
+license = "GPL-3.0-only"
+# https://pypi.org/classifiers/
+classifiers = [
+    # "Development Status :: 1 - Planning",
+    # "Development Status :: 2 - Pre-Alpha",
+    # "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
+    # "Development Status :: 5 - Production/Stable",
+    # "Development Status :: 6 - Mature",
+    # "Development Status :: 7 - Inactive",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    # "Operating System :: Unix",
+    # "Operating System :: POSIX",
+    # "Operating System :: Microsoft :: Windows",
+    # "Operating System :: MacOS",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities"
+]
+
+
+[tool.poetry.scripts]
+iptool = 'iptool.__main__:cli'
+
+[tool.poetry.dependencies]
+python = "^3.8"
+click = "^8.0.1"
+rich = "^10.12.0"
+click-default-group = "^1.2.2"
+
+[tool.poetry.dev-dependencies]
+black = "^22.3.0"
+mypy = "^0.950"
+pylint = "^2.13.0"
+pytest = "^7.1.0"
+tox = "^3.25.0"
+
+[tool.pylint.simple]
+good-names-rgxs = "^[a-z_][a-z0-9_]*"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
