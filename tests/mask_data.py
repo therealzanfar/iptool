@@ -13,22 +13,22 @@ __ALL__ = [
 ]
 
 
-class SubnetTestDataItemT(TypedDict):  # noqa: D101
+class MaskTestDataItemT(TypedDict):  # noqa: D101
     input: str
     expected: int
 
 
-class SubnetTestDataT(TypedDict):  # noqa: D101
-    masklens: list[SubnetTestDataItemT]
-    netmasks: list[SubnetTestDataItemT]
-    hostmasks: list[SubnetTestDataItemT]
+class MaskTestDataT(TypedDict):  # noqa: D101
+    masklens: list[MaskTestDataItemT]
+    netmasks: list[MaskTestDataItemT]
+    hostmasks: list[MaskTestDataItemT]
 
 
-subnet_test_data: SubnetTestDataT
+mask_test_data: MaskTestDataT
 
-subnet_test_data_path = Path(__file__).resolve().parent / "subnet_data.json"
-with open(subnet_test_data_path, encoding="utf-8") as data_fh:
-    subnet_test_data = cast(SubnetTestDataT, json.load(data_fh))
+mask_test_data_path = Path(__file__).resolve().parent / "mask_data.json"
+with open(mask_test_data_path, encoding="utf-8") as data_fh:
+    mask_test_data = cast(MaskTestDataT, json.load(data_fh))
 
 
 MASKLEN_TEST_DATA = [
@@ -37,7 +37,7 @@ MASKLEN_TEST_DATA = [
         item["expected"],
         id=item["input"],
     )
-    for item in subnet_test_data["masklens"]
+    for item in mask_test_data["masklens"]
 ]
 
 NETMASK_TEST_DATA = [
@@ -46,7 +46,7 @@ NETMASK_TEST_DATA = [
         item["expected"],
         id=item["input"],
     )
-    for item in subnet_test_data["netmasks"]
+    for item in mask_test_data["netmasks"]
 ]
 
 HOSTMASK_TEST_DATA = [
@@ -55,5 +55,5 @@ HOSTMASK_TEST_DATA = [
         item["expected"],
         id=item["input"],
     )
-    for item in subnet_test_data["hostmasks"]
+    for item in mask_test_data["hostmasks"]
 ]

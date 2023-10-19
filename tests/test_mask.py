@@ -6,15 +6,15 @@ from unittest.mock import patch
 
 import pytest
 
-from iptool.subnet import (
-    _parse_ipv4_cidr_masklen,
-    _parse_ipv4_subnet_mask,
-    _parse_ipv4_wildcard_mask,
-    parse_subnet_fragment,
-    print_ipv4_subnet_table,
+from iptool.mask import (
+    _parse_ipv4_hostmask_fragment,
+    _parse_ipv4_masklen_fragment,
+    _parse_ipv4_netmask_fragment,
+    parse_mask_fragment,
+    print_ipv4_mask_table,
 )
 
-from .subnet_data import HOSTMASK_TEST_DATA, MASKLEN_TEST_DATA, NETMASK_TEST_DATA
+from .mask_data import HOSTMASK_TEST_DATA, MASKLEN_TEST_DATA, NETMASK_TEST_DATA
 
 
 @pytest.mark.parametrize(
@@ -22,7 +22,7 @@ from .subnet_data import HOSTMASK_TEST_DATA, MASKLEN_TEST_DATA, NETMASK_TEST_DAT
     MASKLEN_TEST_DATA,
 )
 def test_masklength_parse(fragment: str, expected: int) -> None:
-    assert _parse_ipv4_cidr_masklen(fragment) == expected
+    assert _parse_ipv4_masklen_fragment(fragment) == expected
 
 
 @pytest.mark.parametrize(
@@ -30,7 +30,7 @@ def test_masklength_parse(fragment: str, expected: int) -> None:
     NETMASK_TEST_DATA,
 )
 def test_subnet_parse(fragment: str, expected: int) -> None:
-    assert _parse_ipv4_subnet_mask(fragment) == expected
+    assert _parse_ipv4_netmask_fragment(fragment) == expected
 
 
 @pytest.mark.parametrize(
@@ -38,7 +38,7 @@ def test_subnet_parse(fragment: str, expected: int) -> None:
     HOSTMASK_TEST_DATA,
 )
 def test_wildcard_parse(fragment: str, expected: int) -> None:
-    assert _parse_ipv4_wildcard_mask(fragment) == expected
+    assert _parse_ipv4_hostmask_fragment(fragment) == expected
 
 
 @pytest.mark.parametrize(
@@ -46,7 +46,7 @@ def test_wildcard_parse(fragment: str, expected: int) -> None:
     MASKLEN_TEST_DATA + NETMASK_TEST_DATA + HOSTMASK_TEST_DATA,
 )
 def test_fragment_parse(fragment: str, expected: int) -> None:
-    assert parse_subnet_fragment(fragment) == expected
+    assert parse_mask_fragment(fragment) == expected
 
 
 class ExpectedSubnetInfoT(NamedTuple):  # noqa: D101
@@ -94,7 +94,7 @@ def test_ipv4_table(
     end: int,
     expected: list[ExpectedSubnetInfoT],
 ) -> None:
-    print_ipv4_subnet_table(start, end)
+    print_ipv4_mask_table(start, end)
     output = mock_stdout.getvalue()
 
     for exp in expected:

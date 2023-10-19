@@ -27,45 +27,51 @@ IPAddressT = Union[IPv4Address, IPv6Address]
 IPInterfaceT = Union[IPv4Interface, IPv6Interface]
 IPNetworkT = Union[IPv4Network, IPv6Network]
 
-_re_ip4_addr_octet: str = r"(?:25[0-5]|2[0-4][0-9]|1?[0-9][0-9]|[0-9])"
-_re_ip4_addr: str = (
-    rf"{_re_ip4_addr_octet}\.{_re_ip4_addr_octet}\."
-    rf"{_re_ip4_addr_octet}\.{_re_ip4_addr_octet}"
+_re_ipv4_address_octet: str = r"(?:25[0-5]|2[0-4][0-9]|1?[0-9][0-9]|[0-9])"
+_re_ipv4_address: str = (
+    rf"{_re_ipv4_address_octet}\.{_re_ipv4_address_octet}\."
+    rf"{_re_ipv4_address_octet}\.{_re_ipv4_address_octet}"
 )
-RE_IPv4_ADDR: re.Pattern = re.compile(rf"\b{_re_ip4_addr}\b")
+RE_IPV4_ADDRESS: re.Pattern = re.compile(rf"\b{_re_ipv4_address}\b")
 
-_re_ip4_subnet_octet: str = r"(?:0|128|192|224|240|248|252|254)"
-_re_ip4_subnet_a: str = rf"{_re_ip4_subnet_octet}\.0\.0\.0"
-_re_ip4_subnet_b: str = rf"255\.{_re_ip4_subnet_octet}\.0\.0"
-_re_ip4_subnet_c: str = rf"255\.255.{_re_ip4_subnet_octet}\.0"
-_re_ip4_subnet_d: str = rf"255\.255\.255\.{_re_ip4_subnet_octet}"
-_re_ip4_subnet_e: str = r"255\.255\.255\.255"
-_re_ip4_subnet: str = (
-    rf"(?:{_re_ip4_subnet_a}|{_re_ip4_subnet_b}|{_re_ip4_subnet_c}"
-    rf"|{_re_ip4_subnet_d}|{_re_ip4_subnet_e})"
+_re_ipv4_netmask_octet: str = r"(?:0|128|192|224|240|248|252|254)"
+_re_ipv4_netmask_a: str = rf"{_re_ipv4_netmask_octet}\.0\.0\.0"
+_re_ipv4_netmask_b: str = rf"255\.{_re_ipv4_netmask_octet}\.0\.0"
+_re_ipv4_netmask_c: str = rf"255\.255.{_re_ipv4_netmask_octet}\.0"
+_re_ipv4_netmask_d: str = rf"255\.255\.255\.{_re_ipv4_netmask_octet}"
+_re_ipv4_netmask_e: str = r"255\.255\.255\.255"
+_re_ipv4_netmask: str = (
+    rf"(?:{_re_ipv4_netmask_a}|{_re_ipv4_netmask_b}|{_re_ipv4_netmask_c}"
+    rf"|{_re_ipv4_netmask_d}|{_re_ipv4_netmask_e})"
 )
-RE_IPv4_SUBNET: re.Pattern = re.compile(rf"\b{_re_ip4_subnet}\b")
+RE_IPV4_NETMASK: re.Pattern = re.compile(rf"\b{_re_ipv4_netmask}\b")
+RE_IPV4_SUBNET = RE_IPV4_NETMASK
 
-# re_ip4_wildcard_octet: str = re_ip4_addr_octet
-# re_ip4_wildcard_a: str = fr"{re_ip4_wildcard_octet}\.255\.255\.255"
-# re_ip4_wildcard_b: str = fr"0.{re_ip4_wildcard_octet}\.255\.255"
-# re_ip4_wildcard_c: str = fr"0\.0.{re_ip4_wildcard_octet}\.255"
-# re_ip4_wildcard_d: str = fr"0\.0\.0\.{re_ip4_wildcard_octet}"
-# re_ip4_wildcard: str = (
-#     fr"(?:{re_ip4_wildcard_a}|{re_ip4_wildcard_b}|"
-#     fr"{re_ip4_wildcard_c}|{re_ip4_wildcard_d})"
+# re_ipv4_hostmask_octet: str = re_ipv4_address_octet
+# re_ipv4_hostmask_a: str = fr"{re_ipv4_hostmask_octet}\.255\.255\.255"
+# re_ipv4_hostmask_b: str = fr"0.{re_ipv4_hostmask_octet}\.255\.255"
+# re_ipv4_hostmask_c: str = fr"0\.0.{re_ipv4_hostmask_octet}\.255"
+# re_ipv4_hostmask_d: str = fr"0\.0\.0\.{re_ipv4_hostmask_octet}"
+# re_ipv4_hostmask: str = (
+#     fr"(?:{re_ipv4_whostmask_a}|{re_ipv4_hostmask_b}|"
+#     fr"{re_ipv4_hostmask_c}|{re_ipv4_hostmask_d})"
 # )
-RE_IPv4_WILDCARD: re.Pattern = RE_IPv4_ADDR
+RE_IPV4_HOSTMASK: re.Pattern = RE_IPV4_ADDRESS
+RE_IPV4_WILDCARD = RE_IPV4_HOSTMASK
 
-_re_ipv4_cidr: str = r"\/(?:[12]?[0-9]|3[0-2])"
-RE_IPv4_INTERFACE: re.Pattern = re.compile(
-    rf"\b{_re_ip4_addr}(?:\s+{_re_ip4_subnet}|{_re_ipv4_cidr})\b",
+_re_ipv4_masklen: str = r"\/(?:[12]?[0-9]|3[0-2])"
+RE_IPV4_INTERFACE: re.Pattern = re.compile(
+    rf"\b{_re_ipv4_address}(?:\s+{_re_ipv4_netmask}|{_re_ipv4_masklen})\b",
 )
+RE_IPV4_NETWORK = RE_IPV4_INTERFACE
+
+IP_VERSION_4 = 4
+IP_VERSION_6 = 6
 
 
 def parse_ip_addresses(text: str) -> Iterator[IPAddressT]:
     """Search a string for instances of IP Addresses."""
-    for match in RE_IPv4_ADDR.finditer(text):
+    for match in RE_IPV4_ADDRESS.finditer(text):
         yield IPv4Address(match.group(0))
 
 
