@@ -6,14 +6,16 @@ Some functions are limited to IPv4 at the moment.
 
 import re
 from ipaddress import (
+    AddressValueError,
     IPv4Address,
     IPv4Interface,
     IPv4Network,
     IPv6Address,
     IPv6Interface,
     IPv6Network,
+    ip_interface,
 )
-from typing import Iterator, Tuple, Union
+from typing import Iterator, Optional, Tuple, Union
 
 IPObjectT = Union[
     IPv4Address,
@@ -73,6 +75,32 @@ def parse_ip_addresses(text: str) -> Iterator[IPAddressT]:
     """Search a string for instances of IP Addresses."""
     for match in RE_IPV4_ADDRESS.finditer(text):
         yield IPv4Address(match.group(0))
+
+
+def parse_ip_interface(addr: str, mask: Optional[str] = None) -> Optional[IPInterfaceT]:
+    """Parse a string representation of a network address and optional mask."""
+    net_id = addr
+
+    if mask is not None:
+        if mask.startswith("/"):
+            net_id += mask
+        else:
+            net_id += f"/{mask}"
+
+    try:
+        return ip_interface(net_id)
+    except AddressValueError:
+        return None
+
+
+def parse_ip_network(addr: str, mask: Optional[str] = None) -> Optional[IPNetworkT]:
+    """Parse a string representation of a network address and optional mask."""
+    net_id = parse_ip_interface(addr, mask)
+
+    if net_id is not None:
+        return net_id.network
+
+    return None
 
 
 def sort_ip_objects(obj: IPObjectT) -> Tuple[int, int, int, int]:

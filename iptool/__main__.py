@@ -10,6 +10,7 @@ from click_default_group import DefaultGroup
 
 from iptool.cli import CLICK_CONTEXT, setup_logging
 from iptool.mask.__main__ import cli_mask
+from iptool.subnet.__main__ import cli_subnet
 
 
 @click.group(
@@ -35,6 +36,7 @@ def cli_main(verbose: int = 0) -> int:
 
 
 cli_main.add_command(cli_mask, name="mask")
+cli_main.add_command(cli_subnet, name="subnet")
 
 if __name__ == "__main__":
     sys.exit(cli_main())
