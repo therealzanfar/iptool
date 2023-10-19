@@ -1,5 +1,6 @@
 """Network Subnet Related Code."""
 
+from iptool.cli import rprint
 from iptool.ip import IP_VERSION_4, IPInterfaceT, IPNetworkT
 from iptool.utils import approximate
 
@@ -8,16 +9,20 @@ def print_subnet_info(interface: IPInterfaceT | IPNetworkT) -> None:
     """Print subnet information."""
     net = interface.network
 
-    print(f"Details for IP Interface: {net.compressed}")
-    print()
+    rprint(
+        "[bold underline]"
+        f"Details for IP Interface: [ip]{interface.compressed}[/ip]"
+        "[/bold underline]",
+    )
+    rprint()
 
-    print(f"    Prefix Size: /{net.prefixlen}")
+    rprint(f"    Prefix Size: [masklen]/{net.prefixlen}[/masklen]")
     if interface.version == IP_VERSION_4:
-        print(f"        Netmask: {net.netmask.compressed}")
-        print(f"       Wildcard: {net.hostmask.compressed}")
-    print()
+        rprint(f"        Netmask: [netmask]{net.netmask.compressed}[/netmask]")
+        rprint(f"       Wildcard: [hostmask]{net.hostmask.compressed}[/hostmask]")
+    rprint()
 
-    print(f"  First Address: {net[0].compressed}")
-    print(f"   Last Address: {net[-1].compressed}")
+    rprint(f"  First Address: [ip]{net[0].compressed}[/ip]")
+    rprint(f"   Last Address: [ip]{net[-1].compressed}[/ip]")
 
-    print(f"Total Addresses: {approximate(net.num_addresses)}")
+    rprint(f"Total Addresses: [number]{approximate(net.num_addresses)}[/number]")

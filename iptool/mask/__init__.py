@@ -5,8 +5,7 @@ import ipaddress
 import re
 from typing import Optional
 
-from rich.console import Console
-
+from iptool.cli import rprint
 from iptool.utils import ordinal
 
 IPV4_OCTET_COUNT = 4
@@ -99,22 +98,22 @@ def print_ipv4_mask_table(
         {
             "title": "Prefix",
             "size": 6,
-            "color": "magenta",
+            "style": "masklen",
         },
         {
             "title": "Netmask",
             "size": 15,
-            "color": "green",
+            "style": "netmask",
         },
         {
             "title": "Hostmask",
             "size": 15,
-            "color": "yellow",
+            "style": "hostmask",
         },
         {
             "title": "Increment By",
             "size": 20,
-            "color": "white",
+            "style": "number",
         },
     ]
 
@@ -125,19 +124,19 @@ def print_ipv4_mask_table(
     space_len = 2
 
     spaces = " " * space_len
-    rowlen = sum(c["size"] for c in columns) + space_len * (len(columns) - 1)
 
-    hfmt = spaces.join(f"{{:>{c['size']}s}}" for c in columns)
-    rfmt = spaces.join(
-        rf"[{c['color']}]{{:>{c['size']}s}}[/{c['color']}]" for c in columns
+    hfmt = (
+        "[bold underline]"
+        + spaces.join(f"{{:>{c['size']}s}}" for c in columns)
+        + "[/bold underline]"
     )
-
-    rprint = Console().print
+    rfmt = spaces.join(
+        rf"[{c['style']}]{{:>{c['size']}s}}[/{c['style']}]" for c in columns
+    )
 
     rprint(
         hfmt.format(*(c["title"] for c in columns)),
     )
-    rprint("-" * rowlen)
 
     for s in range(start_prefix, end_prefix + 1):
         snet = ipaddress.ip_network(f"0.0.0.0/{s}")
