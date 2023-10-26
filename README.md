@@ -53,6 +53,12 @@ following command is also available:
 
 -   `subnet`
 
+### Summarize
+
+The `summarize` command aggregates the provided addresses or networks into a
+minimum-size list that contains the same IP space. This command prioritizes
+accuracy over size.
+
 ## Installation
 
     python3 -m pip install git+https://github.com/therealzanfar/iptool.git

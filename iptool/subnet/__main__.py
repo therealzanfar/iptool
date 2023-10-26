@@ -9,7 +9,7 @@ from typing import Optional
 import click
 
 from iptool.cli import CLICK_CONTEXT, setup_logging
-from iptool.ip import parse_ip_interface
+from iptool.ip import normalize_ip_interface
 from iptool.subnet import print_subnet_info
 
 
@@ -35,7 +35,7 @@ def cli_subnet(
     logger = logging.getLogger(__name__)
     logger.debug("Running with options: %s", ", ".join(f"{k!s}={v!r}" for k, v in args))
 
-    interface = parse_ip_interface(net_id, mask)
+    interface = normalize_ip_interface(net_id, mask)
     if interface is None:
         ctx = click.get_current_context()
         ctx.fail("Invalid network address and/or mask")
