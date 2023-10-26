@@ -9,12 +9,14 @@ import click
 from click_default_group import DefaultGroup
 
 from iptool.cli import CLICK_CONTEXT, setup_logging
+from iptool.mask.__main__ import cli_mask
+from iptool.subnet.__main__ import cli_subnet
 
 
 @click.group(
     context_settings=CLICK_CONTEXT,
     cls=DefaultGroup,
-    default="subnet",
+    default="mask",
     default_if_no_args=True,
 )
 @click.option("-v", "--verbose", count=True)
@@ -32,6 +34,9 @@ def cli_main(verbose: int = 0) -> int:
 
     return 0
 
+
+cli_main.add_command(cli_mask, name="mask")
+cli_main.add_command(cli_subnet, name="subnet")
 
 if __name__ == "__main__":
     sys.exit(cli_main())

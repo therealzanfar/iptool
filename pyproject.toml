@@ -26,6 +26,9 @@ classifiers = [
 
 [tool.poetry.scripts]
 iptool = 'iptool.__main__:cli_main'
+mask = 'iptool.mask.__main__:cli_mask'
+cidr = 'iptool.mask.__main__:cli_mask'       # Legacy alias for 'mask'
+subnet = 'iptool.subnet.__main__:cli_subnet'
 
 [tool.poetry.dependencies]
 python = "^3.10"
