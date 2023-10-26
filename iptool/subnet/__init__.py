@@ -11,7 +11,7 @@ def print_subnet_info(interface: IPInterfaceT | IPNetworkT) -> None:
 
     rprint(
         "[bold underline]"
-        f"Details for IP Interface: [ip]{interface.compressed}[/ip]"
+        f"Details for IP Network: [ip]{net.compressed}[/ip]"
         "[/bold underline]",
     )
     rprint()
