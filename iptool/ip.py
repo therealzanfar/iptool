@@ -14,9 +14,10 @@ from ipaddress import (
     IPv6Address,
     IPv6Interface,
     IPv6Network,
+    collapse_addresses,
     ip_interface,
 )
-from typing import Iterable, Iterator, Optional, Tuple, Union, overload
+from typing import Iterable, Iterator, Optional, Tuple, TypeVar, Union, overload
 
 IPObjectT = Union[
     IPv4Address,
@@ -251,6 +252,14 @@ def parse_ip_network(addr: str, mask: Optional[str] = None) -> Optional[IPNetwor
     return None
 
 
+T = TypeVar("T")
+
+
+def ip_object_sort(seq: Iterable[T]) -> list[T]:
+    """Sort IP Objects."""
+    return sorted(seq, key=ip_object_sort_key)
+
+
 def ip_object_sort_key(obj: IPObjectT) -> Tuple[int, int, int, int]:
     """
     Universal key for sorting diverse IP objects.
@@ -278,3 +287,14 @@ def ip_object_sort_key(obj: IPObjectT) -> Tuple[int, int, int, int]:
         )
 
     return (obj.version, is_net, mask, key)
+
+
+def summarize_ip_networks(nets: Iterable[IPNetworkT]) -> list[IPNetworkT]:
+    """Summarize IP Network Objects."""
+    nets_v4 = filter_ipv4_objects(nets)
+    nets_v6 = filter_ipv6_objects(nets)
+
+    summaries_v4 = list(collapse_addresses(nets_v4))
+    summaries_v6 = list(collapse_addresses(nets_v6))
+
+    return ip_object_sort(summaries_v4 + summaries_v6)

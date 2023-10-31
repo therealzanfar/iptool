@@ -8,12 +8,7 @@ import sys
 import click
 
 from iptool.cli import CLICK_CONTEXT, rprint, setup_logging
-from iptool.ip import (
-    IPNetworkT,
-    filter_ipv4_objects,
-    filter_ipv6_objects,
-    parse_ip_networks,
-)
+from iptool.ip import IPNetworkT, parse_ip_networks, summarize_ip_networks
 
 
 def read_ips_from_stdin() -> list[IPNetworkT]:
@@ -82,12 +77,10 @@ def cli_summarize(
     if read_stdin:
         networks.extend(parse_ip_networks(sys.stdin))
 
-    summaries_v4 = filter_ipv4_objects(networks)
-    summaries_v6 = filter_ipv6_objects(networks)
+    summaries = summarize_ip_networks(networks)
 
-    for summary in (summaries_v4, summaries_v6):
-        for network in summary:
-            rprint(network.compressed)
+    for s in summaries:
+        rprint(s.compressed)
 
 
 if __name__ == "__main__":
